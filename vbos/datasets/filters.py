@@ -7,6 +7,8 @@ from django_filters import (
 )
 
 from .models import (
+    AreaCouncil,
+    Province,
     RasterDataset,
     TabularItem,
     VectorDataset,
@@ -50,9 +52,20 @@ class TabularDatasetFilter(DatasetFilter):
         fields = ["name", "source", "cluster", "created", "updated"]
 
 
-class TabularItemFilter(FilterSet):
-    filter = CharFilter(
-        field_name="data",
+class DataItemsBaseFilter(FilterSet):
+    attribute = CharFilter(lookup_expr="icontains")
+    province = ModelChoiceFilter(
+        field_name="province__name",
+        to_field_name="name__iexact",
+        queryset=Province.objects.all(),
+    )
+    area_council = ModelChoiceFilter(
+        field_name="area_council__name",
+        to_field_name="name__iexact",
+        queryset=AreaCouncil.objects.all(),
+    )
+    metadata = CharFilter(
+        field_name="metadata",
         method="filter_metadata",
         help_text="""Filter by the content of the data JSONField.""",
     )
@@ -91,18 +104,27 @@ class TabularItemFilter(FilterSet):
 
         return queryset
 
+
+class TabularItemFilter(DataItemsBaseFilter):
+    date = DateFromToRangeFilter()
+
     class Meta:
         model = TabularItem
-        fields = ["filter", "id"]
+        fields = ["metadata", "attribute", "province", "area_council", "id", "date"]
 
 
-class VectorItemFilter(TabularItemFilter):
-    filter = CharFilter(
-        field_name="metadata",
-        method="filter_metadata",
-        help_text="""Filter by the content of the metadata JSONField.""",
-    )
+class VectorItemFilter(DataItemsBaseFilter):
+    name = CharFilter(lookup_expr="icontains")
+    ref = CharFilter(lookup_expr="icontains")
 
     class Meta:
         model = VectorItem
-        fields = ["filter", "id"]
+        fields = [
+            "metadata",
+            "attribute",
+            "province",
+            "area_council",
+            "id",
+            "name",
+            "ref",
+        ]

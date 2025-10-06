@@ -119,11 +119,19 @@ class VectorDataset(models.Model):
 
 class VectorItem(models.Model):
     dataset = models.ForeignKey(VectorDataset, on_delete=models.CASCADE)
+    name = models.CharField(max_length=155, blank=True, null=True)
+    ref = models.CharField(max_length=50, blank=True, null=True)
+    attribute = models.CharField(max_length=155, blank=True, null=True)
+    province = models.ForeignKey(Province, null=True, on_delete=models.PROTECT)
+    area_council = models.ForeignKey(AreaCouncil, null=True, on_delete=models.PROTECT)
     geometry = models.GeometryField()
     metadata = models.JSONField(default=dict, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.id}"
+        if self.name:
+            return f"{self.id} ({self.name})"
+        else:
+            return f"{self.id}"
 
     class Meta:
         ordering = ["id"]
@@ -149,7 +157,12 @@ class TabularDataset(models.Model):
 
 class TabularItem(models.Model):
     dataset = models.ForeignKey(TabularDataset, on_delete=models.CASCADE)
-    data = models.JSONField(default=dict)
+    date = models.DateField(null=True)
+    attribute = models.CharField(max_length=155, blank=True, null=True)
+    value = models.FloatField(default=0)
+    province = models.ForeignKey(Province, null=True, on_delete=models.PROTECT)
+    area_council = models.ForeignKey(AreaCouncil, null=True, on_delete=models.PROTECT)
+    metadata = models.JSONField(default=dict)
 
     def __str__(self):
         return f"{self.id}"

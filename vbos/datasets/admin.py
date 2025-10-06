@@ -8,8 +8,12 @@ from django.contrib.gis.geos.geometry import GEOSGeometry
 from django.shortcuts import render, redirect, reverse
 from django.urls import path
 
+from vbos.datasets.utils import CSVRow, GeoJSONProperties
+
 from .models import (
+    AreaCouncil,
     Cluster,
+    Province,
     RasterDataset,
     RasterFile,
     TabularDataset,
@@ -44,8 +48,8 @@ class VectorDatasetAdmin(admin.ModelAdmin):
 
 @admin.register(VectorItem)
 class VectorItemAdmin(admin.GISModelAdmin):
-    list_display = ["id", "dataset", "metadata"]
-    list_filter = ["dataset"]
+    list_display = ["id", "dataset", "name", "attribute", "province", "area_council"]
+    list_filter = ["dataset", "province", "area_council"]
 
     def get_urls(self):
         urls = super().get_urls()
@@ -82,10 +86,20 @@ class VectorItemAdmin(admin.GISModelAdmin):
                     error_count = 0
 
                     for item in geojson_content["features"]:
+                        metadata = GeoJSONProperties(item["properties"])
                         try:
                             VectorItem.objects.create(
                                 dataset=form.cleaned_data["dataset"],
-                                metadata=item["properties"],
+                                metadata=metadata.properties,
+                                name=metadata.name,
+                                ref=metadata.ref,
+                                attribute=metadata.attribute,
+                                province=Province.objects.filter(
+                                    name__iexact=metadata.province
+                                ).first(),
+                                area_council=AreaCouncil.objects.filter(
+                                    name__iexact=metadata.area_council
+                                ).first(),
                                 geometry=GEOSGeometry(json.dumps(item["geometry"])),
                             )
                             created_count += 1
@@ -126,8 +140,8 @@ class TabularDatasetAdmin(admin.ModelAdmin):
 
 @admin.register(TabularItem)
 class TabularItemAdmin(admin.GISModelAdmin):
-    list_display = ["id", "dataset", "data"]
-    list_filter = ["dataset"]
+    list_display = ["id", "dataset", "province", "area_council", "attribute", "value"]
+    list_filter = ["dataset", "province", "area_council"]
 
     def get_urls(self):
         urls = super().get_urls()
@@ -166,8 +180,19 @@ class TabularItemAdmin(admin.GISModelAdmin):
 
                     for row in reader:  # start=2 to account for header row
                         try:
+                            csv_row = CSVRow(row)
                             TabularItem.objects.create(
-                                dataset=form.cleaned_data["dataset"], data=row
+                                dataset=form.cleaned_data["dataset"],
+                                metadata=csv_row.metadata,
+                                attribute=csv_row.attribute,
+                                value=csv_row.value,
+                                date=csv_row.date,
+                                province=Province.objects.filter(
+                                    name__iexact=csv_row.province
+                                ).first(),
+                                area_council=AreaCouncil.objects.filter(
+                                    name__iexact=csv_row.area_council
+                                ).first(),
                             )
                             created_count += 1
                         except Exception as e:
