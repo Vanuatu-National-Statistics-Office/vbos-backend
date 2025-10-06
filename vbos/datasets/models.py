@@ -147,6 +147,7 @@ class TabularDataset(models.Model):
     )
     type = models.CharField(max_length=55, choices=TYPE_CHOICES, default="baseline")
     source = models.CharField(max_length=155, blank=True, null=True)
+    unit = models.CharField(max_length=50,  blank=True, null=True)
 
     def __str__(self):
         return self.name

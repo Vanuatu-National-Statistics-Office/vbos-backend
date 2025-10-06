@@ -66,7 +66,7 @@ class TabularDatasetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TabularDataset
-        fields = ["id", "name", "created", "updated", "cluster", "type", "source"]
+        fields = ["id", "name", "created", "updated", "cluster", "type", "source", "unit"]
 
 
 class TabularItemSerializer(serializers.ModelSerializer):
