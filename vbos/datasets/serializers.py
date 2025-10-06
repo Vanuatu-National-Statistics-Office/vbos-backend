@@ -2,7 +2,9 @@ from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
 from .models import (
+    AreaCouncil,
     Cluster,
+    Province,
     RasterDataset,
     TabularDataset,
     TabularItem,
@@ -15,6 +17,22 @@ class ClusterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cluster
         fields = ["id", "name"]
+
+
+class ProvinceSerializer(GeoFeatureModelSerializer):
+
+    class Meta:
+        model = Province
+        geo_field = "geometry"
+        fields = "__all__"
+
+
+class AreaCouncilSerializer(GeoFeatureModelSerializer):
+
+    class Meta:
+        model = AreaCouncil
+        geo_field = "geometry"
+        fields = "__all__"
 
 
 class RasterDatasetSerializer(serializers.ModelSerializer):
