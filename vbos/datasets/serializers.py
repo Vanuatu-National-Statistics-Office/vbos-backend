@@ -44,25 +44,21 @@ class VectorDatasetSerializer(serializers.ModelSerializer):
 
 
 class VectorItemSerializer(GeoFeatureModelSerializer):
+    province = serializers.ReadOnlyField(source="province.name")
+    area_council = serializers.ReadOnlyField(source="area_council.name")
+
     class Meta:
         model = VectorItem
         geo_field = "geometry"
-        fields = ["id", "metadata"]
-
-    def get_properties(self, instance, fields):
-        # This is a PostgreSQL HStore field, which django maps to a dict
-        return instance.metadata
-
-    def unformat_geojson(self, feature):
-        attrs = {
-            self.Meta.geo_field: feature["geometry"],
-            "metadata": feature["properties"],
-        }
-
-        if self.Meta.bbox_geo_field and "bbox" in feature:
-            attrs[self.Meta.bbox_geo_field] = Polygon.from_bbox(feature["bbox"])
-
-        return attrs
+        fields = [
+            "id",
+            "name",
+            "ref",
+            "attribute",
+            "province",
+            "area_council",
+            "metadata",
+        ]
 
 
 class TabularDatasetSerializer(serializers.ModelSerializer):
@@ -74,15 +70,26 @@ class TabularDatasetSerializer(serializers.ModelSerializer):
 
 
 class TabularItemSerializer(serializers.ModelSerializer):
+    province = serializers.ReadOnlyField(source="province.name")
+    area_council = serializers.ReadOnlyField(source="area_council.name")
+
     class Meta:
         model = TabularItem
-        fields = ["id", "data"]
+        fields = [
+            "id",
+            "attribute",
+            "date",
+            "value",
+            "province",
+            "area_council",
+            "metadata",
+        ]
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
 
         # Extract the data field and merge it with the top level fields
-        data_content = representation.pop("data", {})
+        data_content = representation.pop("metadata", {})
 
         return {**representation, **data_content}
 
@@ -103,7 +110,10 @@ class TabularItemExcelSerializer(serializers.ModelSerializer):
             # Create a field for each key
             for key in all_keys:
                 self.fields[key] = serializers.CharField(
-                    source=f"data.{key}", required=False, allow_blank=True, default=""
+                    source=f"metadata.{key}",
+                    required=False,
+                    allow_blank=True,
+                    default="",
                 )
 
     class Meta:

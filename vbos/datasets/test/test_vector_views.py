@@ -1,9 +1,10 @@
+from pickle import OBJ
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.urls import reverse
 from django.contrib.gis.geos import Polygon, LineString, Point
 
-from ..models import VectorDataset, VectorItem, Cluster
+from ..models import AreaCouncil, Province, VectorDataset, VectorItem, Cluster
 
 
 class TestVectorDatasetListDetailViews(APITestCase):
@@ -60,17 +61,32 @@ class TestVectorDatasetDataView(APITestCase):
         VectorItem.objects.create(
             dataset=self.dataset_1,
             geometry=Point(80.5, 10.232),
-            metadata={"type": "administrative", "name": "Point 1", "area": 5000},
+            name="Point 1",
+            ref="12NC",
+            attribute="administrative",
+            province=Province.objects.get(name="TORBA"),
+            area_council=AreaCouncil.objects.get(name="East Gaua"),
+            metadata={"area": 5000},
         )
         VectorItem.objects.create(
             dataset=self.dataset_1,
             geometry=LineString([(0, 0), (0, 3), (3, 3), (3, 0), (6, 6), (0, 0)]),
-            metadata={"type": "administrative", "name": "Line 123", "area": 5321},
+            name="Line 1",
+            ref="13NC",
+            attribute="administrative",
+            province=Province.objects.get(name="TAFEA"),
+            area_council=AreaCouncil.objects.get(name="Futuna"),
+            metadata={"area": 5321},
         )
         VectorItem.objects.create(
             dataset=self.dataset_2,
             geometry=Polygon([(0, 0), (0, 3), (3, 3), (3, 0), (0, 0)]),
-            metadata={"type": "administrative", "name": "Area 1", "area": 3432},
+            name="Area 1",
+            ref="14NC",
+            attribute="business",
+            province=Province.objects.get(name="TAFEA"),
+            area_council=AreaCouncil.objects.get(name="Futuna"),
+            metadata={"key": "value"},
         )
         self.url = reverse("datasets:vector-data", args=[self.dataset_1.id])
 
@@ -84,7 +100,13 @@ class TestVectorDatasetDataView(APITestCase):
             "coordinates": [80.5, 10.232],
         }
         assert req.data.get("features")[0]["properties"]["name"] == "Point 1"
-        assert req.data.get("features")[0]["properties"]["type"] == "administrative"
+        assert (
+            req.data.get("features")[0]["properties"]["attribute"] == "administrative"
+        )
+        assert req.data.get("features")[0]["properties"]["province"] == "TORBA"
+        assert req.data.get("features")[0]["properties"]["area_council"] == "East Gaua"
+        assert req.data.get("features")[0]["properties"]["ref"] == "12NC"
+        assert req.data.get("features")[0]["properties"]["metadata"]["area"] == 5000
 
         # fetch second dataset's data
         url = reverse("datasets:vector-data", args=[self.dataset_2.id])
@@ -110,23 +132,37 @@ class TestVectorDatasetDataView(APITestCase):
         }
         assert req.data.get("features")[0]["properties"]["name"] == "Point 1"
 
-        # filter by metadata
-        req = self.client.get(self.url, {"filter": "name__icontains=Point"})
+        # filter by name
+        req = self.client.get(self.url, {"name": "Point"})
         assert req.status_code == status.HTTP_200_OK
         assert req.data.get("count") == 1
 
-        req = self.client.get(self.url, {"filter": "area__lt=5000"})
+        # filter by attribute
+        req = self.client.get(self.url, {"attribute": "ADMINISTRATIVE"})
+        assert req.status_code == status.HTTP_200_OK
+        assert req.data.get("count") == 2
+
+        # filter by province
+        req = self.client.get(self.url, {"province": "tafea"})
+        assert req.status_code == status.HTTP_200_OK
+        assert req.data.get("count") == 1
+
+        # filter by area council
+        req = self.client.get(self.url, {"area_council": "East Gaua"})
+        assert req.status_code == status.HTTP_200_OK
+        assert req.data.get("count") == 1
+
+        # filter by metadata
+        req = self.client.get(self.url, {"metadata": "area__lt=5000"})
         assert req.status_code == status.HTTP_200_OK
         assert req.data.get("count") == 0
 
-        req = self.client.get(
-            self.url, {"filter": "area__gte=5000, type=administrative"}
-        )
+        req = self.client.get(self.url, {"metadata": "area__gte=5000"})
         assert req.status_code == status.HTTP_200_OK
         assert req.data.get("count") == 2
 
         req = self.client.get(
-            self.url, {"filter": "area__gte=5000", "in_bbox": "80,10,81,11"}
+            self.url, {"metadata": "area__gte=5000", "in_bbox": "80,10,81,11"}
         )
         assert req.status_code == status.HTTP_200_OK
         assert req.data.get("count") == 1

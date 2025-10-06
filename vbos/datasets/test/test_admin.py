@@ -1,3 +1,4 @@
+from datetime import date
 import io
 
 from django.contrib.auth import get_user_model
@@ -50,24 +51,36 @@ class TabularItemAdminImportFileTests(TestCase):
         self.assertContains(response, "Please upload a CSV file")
 
     def test_post_valid_csv_creates_items(self):
-        csv_content = "col1,col2\nval1,val2\nval3,val4\n"
-        file_data = io.BytesIO(csv_content.encode("utf-8"))
-        file_data.name = "test.csv"
-        response = self.client.post(
-            self.upload_url,
-            {"file": file_data, "dataset": self.dataset.id},
-            follow=True,
-        )
-        self.assertContains(response, "Successfully created 2 new records")
-        self.assertEqual(TabularItem.objects.count(), 2)
-        ti_1 = TabularItem.objects.first()
+        csv_path = "./vbos/datasets/fixtures/test.csv"
+        with open(csv_path, "rb") as file_data:
+            response = self.client.post(
+                self.upload_url,
+                {"file": file_data, "dataset": self.dataset.id},
+                follow=True,
+            )
+        self.assertContains(response, "Successfully created 3 new records")
+        self.assertEqual(TabularItem.objects.count(), 3)
+        ti_1, ti_2, ti_3 = TabularItem.objects.all()
         self.assertEqual(ti_1.dataset.id, self.dataset.id)
-        self.assertEqual(ti_1.data["col1"], "val1")
-        self.assertEqual(ti_1.data["col2"], "val2")
-        ti_2 = TabularItem.objects.last()
+        self.assertEqual(ti_1.date, date(2024, 1, 1))
+        self.assertEqual(ti_1.attribute, "ecce")
+        self.assertEqual(ti_1.province.name, "TAFEA")
+        self.assertEqual(ti_1.area_council.name, "Futuna")
+        self.assertEqual(ti_1.value, 1154)
+        self.assertEqual(ti_1.metadata["Other"], "yes")
         self.assertEqual(ti_2.dataset.id, self.dataset.id)
-        self.assertEqual(ti_2.data["col1"], "val3")
-        self.assertEqual(ti_2.data["col2"], "val4")
+        self.assertEqual(ti_2.date, date(2022, 5, 1))
+        self.assertEqual(ti_2.attribute, "secondary")
+        self.assertEqual(ti_2.province.name, "TAFEA")
+        self.assertEqual(ti_2.area_council.name, "Futuna")
+        self.assertEqual(ti_2.value, 1154)
+        self.assertEqual(ti_2.metadata["Other"], "no")
+        self.assertEqual(ti_3.dataset.id, self.dataset.id)
+        self.assertEqual(ti_3.date, date(2025, 1, 1))
+        self.assertEqual(ti_3.attribute, "primary")
+        self.assertEqual(ti_3.province, None)
+        self.assertEqual(ti_3.area_council, None)
+        self.assertEqual(ti_3.value, 1154)
 
 
 class VectorItemAdminImportFileTests(TestCase):
@@ -118,8 +131,21 @@ class VectorItemAdminImportFileTests(TestCase):
         self.assertEqual(VectorItem.objects.count(), 3)
         vi_1, vi_2, vi_3 = VectorItem.objects.all()
         self.assertEqual(vi_1.dataset.id, self.dataset.id)
-        self.assertEqual(vi_1.metadata["name"], "Area 1")
+        self.assertEqual(vi_1.name, "Area 1")
+        self.assertEqual(vi_1.ref, "12NC")
+        self.assertEqual(vi_1.attribute, "Schools")
+        self.assertEqual(vi_1.province.name, "TORBA")
+        self.assertEqual(vi_1.area_council.name, "East Gaua")
         self.assertEqual(vi_2.dataset.id, self.dataset.id)
-        self.assertEqual(vi_2.metadata["name"], "Line 1")
+        self.assertEqual(vi_2.name, "Line 1")
+        self.assertEqual(vi_2.ref, "13NC")
+        self.assertEqual(vi_2.attribute, "Roads")
+        self.assertEqual(vi_2.province.name, "TAFEA")
+        self.assertEqual(vi_2.area_council.name, "Futuna")
         self.assertEqual(vi_3.dataset.id, self.dataset.id)
-        self.assertEqual(vi_3.metadata["name"], "Point 1")
+        self.assertEqual(vi_3.name, "Point 2")
+        self.assertEqual(vi_3.ref, "14NC")
+        self.assertEqual(vi_3.attribute, "Business")
+        self.assertEqual(vi_3.province.name, "TAFEA")
+        self.assertEqual(vi_3.area_council.name, "Futuna")
+        self.assertEqual(vi_3.metadata["source"], "OpenStreetMap")

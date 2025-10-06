@@ -4,7 +4,12 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Area 1"
+        "name": "Area 1",
+        "ref": "12NC",
+        "Province": "Torba",
+        "Area Council": "East Gaua",
+        "Attribute": "Schools",
+        "extra": "value"
       },
       "geometry": {
         "coordinates": [
@@ -36,7 +41,13 @@
     },
     {
       "type": "Feature",
-      "properties": {"name": "Line 1", "col": "val"},
+      "properties": {
+        "name": "Line 1",
+        "ref": "13NC",
+        "Province": "TAFEA",
+        "Area Council": "Futuna",
+        "Attribute": "Roads"
+    },
       "geometry": {
         "coordinates": [
           [
@@ -53,7 +64,14 @@
     },
     {
       "type": "Feature",
-      "properties": {"name": "Point 1", "source": "OpenStreetMap"},
+      "properties": {
+        "name": "Point 2",
+        "ref": "14NC",
+        "Province": "TAFEA",
+        "Area Council": "Futuna",
+        "Attribute": "Business",
+        "source": "OpenStreetMap"
+      },
       "geometry": {
         "coordinates": [
           167.72470,
