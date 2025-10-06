@@ -7,6 +7,12 @@ app_name = "datasets"
 urlpatterns = [
     # raster
     path("cluster/", views.ClusterListView.as_view(), name="cluster-list"),
+    path("province/", views.ProvinceListView.as_view(), name="province-list"),
+    path(
+        "area-council/<str:province>/",
+        views.AreaCouncilListView.as_view(),
+        name="area-council-list",
+    ),
     path("raster/", views.RasterDatasetListView.as_view(), name="raster-list"),
     path(
         "raster/<int:pk>/",

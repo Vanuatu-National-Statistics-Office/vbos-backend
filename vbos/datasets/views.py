@@ -14,7 +14,9 @@ from vbos.datasets.filters import (
 )
 
 from .models import (
+    AreaCouncil,
     Cluster,
+    Province,
     RasterDataset,
     TabularDataset,
     TabularItem,
@@ -23,7 +25,9 @@ from .models import (
 )
 from .pagination import StandardResultsSetPagination
 from .serializers import (
+    AreaCouncilSerializer,
     ClusterSerializer,
+    ProvinceSerializer,
     RasterDatasetSerializer,
     TabularDatasetSerializer,
     TabularItemExcelSerializer,
@@ -38,6 +42,24 @@ class ClusterListView(ListAPIView):
     serializer_class = ClusterSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = StandardResultsSetPagination
+
+
+class ProvinceListView(ListAPIView):
+    queryset = Province.objects.all()
+    serializer_class = ProvinceSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = GeoJsonPagination
+
+
+class AreaCouncilListView(ListAPIView):
+    serializer_class = AreaCouncilSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = GeoJsonPagination
+
+    def get_queryset(self):
+        return AreaCouncil.objects.filter(
+            province__name__iexact=self.kwargs.get("province")
+        )
 
 
 class RasterDatasetListView(ListAPIView):
