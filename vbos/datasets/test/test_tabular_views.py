@@ -20,7 +20,7 @@ class TestTabularDatasetListDetailViews(APITestCase):
             cluster=Cluster.objects.create(name="Statistics"),
             source="Government",
             type="estimated_damage",
-            unit="Vatu (VUV)"
+            unit="Vatu (VUV)",
         )
         self.url = reverse("datasets:tabular-list")
 
