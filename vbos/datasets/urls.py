@@ -7,9 +7,9 @@ app_name = "datasets"
 urlpatterns = [
     # raster
     path("cluster/", views.ClusterListView.as_view(), name="cluster-list"),
-    path("province/", views.ProvinceListView.as_view(), name="province-list"),
+    path("provinces/", views.ProvinceListView.as_view(), name="province-list"),
     path(
-        "area-council/<str:province>/",
+        "provinces/<str:province>/area-councils/",
         views.AreaCouncilListView.as_view(),
         name="area-council-list",
     ),
