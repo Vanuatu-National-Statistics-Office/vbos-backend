@@ -111,7 +111,7 @@ class VectorDataset(models.Model):
     source = models.CharField(max_length=155, blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.type})"
 
     class Meta:
         ordering = ["id"]
@@ -150,7 +150,7 @@ class TabularDataset(models.Model):
     unit = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.type})"
 
     class Meta:
         ordering = ["id"]
