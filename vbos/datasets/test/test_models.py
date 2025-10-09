@@ -4,7 +4,13 @@ from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.exceptions import ValidationError
 
-from vbos.datasets.models import Cluster, RasterDataset, RasterFile, TabularDataset, VectorDataset
+from vbos.datasets.models import (
+    Cluster,
+    RasterDataset,
+    RasterFile,
+    TabularDataset,
+    VectorDataset,
+)
 
 
 class TestRasterModels(TestCase):
@@ -76,7 +82,7 @@ class TestRasterModels(TestCase):
             cluster=self.cluster,
             source="Government",
             file=r_2,
-            type="estimated_damage"
+            type="estimated_damage",
         )
         with self.assertRaises(IntegrityError):
             RasterDataset.objects.create(
@@ -99,7 +105,7 @@ class TestTabularDatasetModel(TestCase):
             name="Population",
             cluster=self.cluster,
             source="Government",
-            type="estimated_damage"
+            type="estimated_damage",
         )
         with self.assertRaises(IntegrityError):
             TabularDataset.objects.create(
@@ -121,7 +127,7 @@ class TestVectorDatasetModel(TestCase):
             name="Population",
             cluster=self.cluster,
             source="Government",
-            type="estimated_damage"
+            type="estimated_damage",
         )
         with self.assertRaises(IntegrityError):
             VectorDataset.objects.create(
