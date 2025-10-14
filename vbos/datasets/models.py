@@ -10,9 +10,9 @@ UPLOAD_TO = "staging/raster/" if settings.DEBUG else "production/raster/"
 
 TYPE_CHOICES = {
     "baseline": _("Baseline"),
-    "estimated_damage": _("Estimated Damage"),
-    "aid_resources_needed": _("Resources Needed to be Sent to Those Affected"),
-    "estimate_financial_damage": _("Estimate Financial Damage"),
+    "estimated_damage": _("Estimated Hazard Damage"),
+    "aid_resources_needed": _("Immediate Response Resources"),
+    "estimate_financial_damage": _("Estimated Financial Damage"),
 }
 
 
