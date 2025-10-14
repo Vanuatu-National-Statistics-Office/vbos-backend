@@ -12,4 +12,4 @@ To update or redeploy:
   * Activate venv. `. ~/vbos-env/bin/activate`
   * `cd ~/vbos-backend && git pull`. `python manage.py migrate`
 3. Then run `docker compose -f deploy/vbos/docker-compose.yml pull` to pull the new image. By default the image tag is `main`
-4. Then run `docker compose -f deploy/vbos/docker-compose.yml --env-file /home/devseed/vbos-backend/.env up --force-recreate -d --no-deps vbos-backend` — this will start a new container and kill the older one for deploys with no downtime
+4. Then run `docker compose -f deploy/vbos/docker-compose.yml --env-file /home/devseed/vbos-backend/.env up --force-recreate -d --no-deps vbos-backend titiler` — this will start a new container and kill the older one for deploys with no downtime
