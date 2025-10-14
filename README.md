@@ -1,25 +1,28 @@
 # vbos-backend
 
-[![Build Status](https://travis-ci.org/developmentseed/vbos-backend.svg?branch=master)](https://travis-ci.org/developmentseed/vbos-backend)
+[![Docker](https://github.com/developmentseed/vbos-backend/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/developmentseed/vbos-backend/actions/workflows/docker-publish.yml)
 [![Built with](https://img.shields.io/badge/Built_with-Cookiecutter_Django_Rest-F7B633.svg)](https://github.com/agconti/cookiecutter-django-rest)
 
 VBOS Django application and data services. Check out the project's [documentation](http://developmentseed.github.io/vbos-backend/).
 
 # Prerequisites
 
-- [Docker](https://docs.docker.com/docker-for-mac/install/)
+- [Docker Engine](https://docs.docker.com/engine/install)
+- [Docker Compose](https://docs.docker.com/compose/install)
 
 # Local Development
 
 Start the dev server for local development:
+
 ```bash
-docker-compose up
+cd deploy/
+docker compose up
 ```
 
 Run a command inside the docker container:
 
 ```bash
-docker-compose run --rm web [command]
+docker compose run --rm web [command]
 ```
 
 # Configuration
