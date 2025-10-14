@@ -47,10 +47,15 @@ services:
       PYTHONWARNINGS: ignore
       WEB_CONCURRENCY: 4
     ports:
-      - "8000:80"
+      - "8001:80"
     volumes:
       - ./data:/data # Optional: mount local directory with your raster files
     restart: unless-stopped
+    networks:
+      - caddy
+    labels:
+      caddy: vbos-titiler.ds.io
+      caddy.reverse_proxy: "{{upstreams 8001}}"
 
 networks:
   caddy:
