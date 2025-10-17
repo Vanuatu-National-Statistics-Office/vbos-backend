@@ -82,6 +82,7 @@ def delete_raster_file(sender, instance, **kwargs):
 
 class RasterDataset(models.Model):
     name = models.CharField(max_length=155)
+    description = models.TextField(max_length=2000, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     cluster = models.ForeignKey(
@@ -102,6 +103,7 @@ class RasterDataset(models.Model):
 
 class VectorDataset(models.Model):
     name = models.CharField(max_length=155, unique=False)
+    description = models.TextField(max_length=2000, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     cluster = models.ForeignKey(
@@ -141,6 +143,7 @@ class VectorItem(models.Model):
 
 class TabularDataset(models.Model):
     name = models.CharField(max_length=155, unique=False)
+    description = models.TextField(max_length=2000, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     cluster = models.ForeignKey(

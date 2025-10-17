@@ -15,6 +15,7 @@ class TestRasterDatasetListDetailViews(APITestCase):
         )
         self.dataset_1 = RasterDataset.objects.create(
             name="Rainfall",
+            description="Rainfall data since 2020",
             cluster=Cluster.objects.create(name="Environment"),
             file=self.r_1,
             source="WMO",
@@ -34,6 +35,7 @@ class TestRasterDatasetListDetailViews(APITestCase):
         assert req.data.get("count") == 2
         assert req.data.get("results")[0]["name"] == "Rainfall"
         assert req.data.get("results")[1]["name"] == "Coastline changes"
+        assert req.data.get("results")[0]["description"] == "Rainfall data since 2020"
         assert req.data.get("results")[0]["cluster"] == "Environment"
         assert req.data.get("results")[1]["cluster"] == "Administrative"
         assert req.data.get("results")[0]["source"] == "WMO"
@@ -67,6 +69,7 @@ class TestRasterDatasetListDetailViews(APITestCase):
         assert req.data.get("updated")
         assert req.data.get("source") == "WMO"
         assert req.data.get("cluster") == "Environment"
+        assert req.data.get("description") == "Rainfall data since 2020"
 
     def tearDown(self):
         RasterDataset.objects.all().delete()
