@@ -13,6 +13,7 @@ class TestVectorDatasetListDetailViews(APITestCase):
             name="Boundaries",
             cluster=Cluster.objects.create(name="Administrative"),
             source="OSM",
+            description="Administratives Boundaries",
         )
         self.dataset_2 = VectorDataset.objects.create(
             name="Roads",
@@ -27,6 +28,7 @@ class TestVectorDatasetListDetailViews(APITestCase):
         assert req.data.get("count") == 2
         assert req.data.get("results")[0]["name"] == "Boundaries"
         assert req.data.get("results")[1]["name"] == "Roads"
+        assert req.data.get("results")[0]["description"] == "Administratives Boundaries"
         assert req.data.get("results")[0]["type"] == "baseline"
         assert req.data.get("results")[1]["type"] == "estimated_damage"
 
@@ -44,6 +46,7 @@ class TestVectorDatasetListDetailViews(APITestCase):
         req = self.client.get(url)
         assert req.status_code == status.HTTP_200_OK
         assert req.data.get("name") == "Boundaries"
+        assert req.data.get("description") == "Administratives Boundaries"
         assert req.data.get("created")
         assert req.data.get("updated")
         assert req.data.get("cluster") == "Administrative"
