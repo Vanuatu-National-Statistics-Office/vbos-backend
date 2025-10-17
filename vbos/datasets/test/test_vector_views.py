@@ -88,6 +88,10 @@ class TestVectorDatasetDataView(APITestCase):
             area_council=AreaCouncil.objects.get(name="Futuna"),
             metadata={"key": "value"},
         )
+        VectorItem.objects.create(
+            dataset=self.dataset_2,
+            geometry=Polygon([(0, 0), (0, 3), (3, 3), (3, 0), (0, 0)]),
+        )
         self.url = reverse("datasets:vector-data", args=[self.dataset_1.id])
 
     def test_vector_datasets_data(self):
@@ -112,8 +116,8 @@ class TestVectorDatasetDataView(APITestCase):
         url = reverse("datasets:vector-data", args=[self.dataset_2.id])
         req = self.client.get(url)
         assert req.status_code == status.HTTP_200_OK
-        assert req.data.get("count") == 1
-        assert len(req.data.get("features")) == 1
+        assert req.data.get("count") == 2
+        assert len(req.data.get("features")) == 2
         assert req.data.get("features")[0]["geometry"] == {
             "type": "Polygon",
             "coordinates": [

@@ -67,3 +67,7 @@ class TestRasterDatasetListDetailViews(APITestCase):
         assert req.data.get("updated")
         assert req.data.get("source") == "WMO"
         assert req.data.get("cluster") == "Environment"
+
+    def tearDown(self):
+        RasterDataset.objects.all().delete()
+        RasterFile.objects.all().delete()

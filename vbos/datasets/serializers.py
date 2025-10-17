@@ -62,8 +62,12 @@ class VectorDatasetSerializer(serializers.ModelSerializer):
 
 
 class VectorItemSerializer(GeoFeatureModelSerializer):
-    province = serializers.ReadOnlyField(source="province.name")
-    area_council = serializers.ReadOnlyField(source="area_council.name")
+    province = serializers.CharField(
+        source="province.name", read_only=True, allow_null=True
+    )
+    area_council = serializers.CharField(
+        source="area_council.name", read_only=True, allow_null=True
+    )
 
     class Meta:
         model = VectorItem

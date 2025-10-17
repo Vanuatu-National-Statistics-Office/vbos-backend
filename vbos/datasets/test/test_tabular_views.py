@@ -124,6 +124,10 @@ class TestTabularDatasetDataView(APITestCase):
             province=Province.objects.get(name="TORBA"),
             area_council=AreaCouncil.objects.get(name="East Gaua"),
         )
+        TabularItem.objects.create(
+            dataset=self.dataset_2,
+            value=0.87,
+        )
         self.url = reverse("datasets:tabular-data", args=[self.dataset_1.id])
 
     def test_tabular_datasets_data(self):
@@ -145,8 +149,8 @@ class TestTabularDatasetDataView(APITestCase):
         url = reverse("datasets:tabular-data", args=[self.dataset_2.id])
         req = self.client.get(url)
         assert req.status_code == status.HTTP_200_OK
-        assert req.data.get("count") == 4
-        assert len(req.data.get("results")) == 4
+        assert req.data.get("count") == 5
+        assert len(req.data.get("results")) == 5
         assert req.data.get("results")[0]["province"] == "TORBA"
         assert req.data.get("results")[0]["area_council"] == "East Gaua"
         assert req.data.get("results")[0]["value"] == 0.93
