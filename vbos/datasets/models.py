@@ -94,11 +94,11 @@ class RasterDataset(models.Model):
     file = models.ForeignKey(RasterFile, on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.cluster} / {self.type}"
 
     class Meta:
         ordering = ["id"]
-        unique_together = ["name", "type"]
+        unique_together = ["name", "type", "cluster"]
 
 
 class VectorDataset(models.Model):
@@ -114,11 +114,11 @@ class VectorDataset(models.Model):
     source = models.CharField(max_length=155, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.name} ({self.type})"
+        return f"{self.name} - {self.cluster} / {self.type}"
 
     class Meta:
         ordering = ["id"]
-        unique_together = ["name", "type"]
+        unique_together = ["name", "type", "cluster"]
 
 
 class VectorItem(models.Model):
@@ -155,11 +155,11 @@ class TabularDataset(models.Model):
     unit = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.name} ({self.type})"
+        return f"{self.name} - {self.cluster} / {self.type}"
 
     class Meta:
         ordering = ["id"]
-        unique_together = ["name", "type"]
+        unique_together = ["name", "type", "cluster"]
 
 
 class TabularItem(models.Model):

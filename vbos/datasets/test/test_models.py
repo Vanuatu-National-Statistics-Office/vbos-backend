@@ -66,7 +66,7 @@ class TestRasterModels(TestCase):
 
         RasterFile.objects.all().delete()
 
-    def test_unique_name_type(self):
+    def test_unique_name_type_cluster(self):
         self.cluster = Cluster.objects.create(name="Administrative")
         r_2 = RasterFile.objects.create(
             name="Population Density COG", file="raster/pop.tiff"
@@ -84,6 +84,13 @@ class TestRasterModels(TestCase):
             file=r_2,
             type="estimated_damage",
         )
+        RasterDataset.objects.create(
+            name="Population",
+            cluster=Cluster.objects.create(name="Education"),
+            source="Government",
+            file=r_2,
+            type="estimated_damage",
+        )
         with self.assertRaises(IntegrityError):
             RasterDataset.objects.create(
                 name="Population",
@@ -94,7 +101,7 @@ class TestRasterModels(TestCase):
 
 
 class TestTabularDatasetModel(TestCase):
-    def test_unique_name_type(self):
+    def test_unique_name_type_cluster(self):
         self.cluster = Cluster.objects.create(name="Administrative")
         TabularDataset.objects.create(
             name="Population",
@@ -107,6 +114,12 @@ class TestTabularDatasetModel(TestCase):
             source="Government",
             type="estimated_damage",
         )
+        TabularDataset.objects.create(
+            name="Population",
+            cluster=Cluster.objects.create(name="education"),
+            source="Government",
+            type="estimated_damage",
+        )
         with self.assertRaises(IntegrityError):
             TabularDataset.objects.create(
                 name="Population",
@@ -116,7 +129,7 @@ class TestTabularDatasetModel(TestCase):
 
 
 class TestVectorDatasetModel(TestCase):
-    def test_unique_name_type(self):
+    def test_unique_name_type_cluster(self):
         self.cluster = Cluster.objects.create(name="Administrative")
         VectorDataset.objects.create(
             name="Population",
@@ -126,6 +139,12 @@ class TestVectorDatasetModel(TestCase):
         VectorDataset.objects.create(
             name="Population",
             cluster=self.cluster,
+            source="Government",
+            type="estimated_damage",
+        )
+        VectorDataset.objects.create(
+            name="Population",
+            cluster=Cluster.objects.create(name="education"),
             source="Government",
             type="estimated_damage",
         )
