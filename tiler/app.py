@@ -69,6 +69,7 @@ TITILER_CONFORMS_TO = {
     "http://www.opengis.net/spec/ogcapi-common-1/1.0/conf/json",
 }
 
+
 ###############################################################################
 # TiTiler endpoints
 def DatasetPathParams(
@@ -76,10 +77,7 @@ def DatasetPathParams(
         Literal["coral", "other"],
         Path(description="Dataset"),
     ],
-    year: Annotated[
-        int,
-        Path(description="Year")
-    ]
+    year: Annotated[int, Path(description="Year")],
 ) -> str:
     """Custom Dataset Path Parameter which define dataset_id and year PATH parameter and return a VRT url."""
     name: str
@@ -94,7 +92,7 @@ def DatasetPathParams(
 tiler = TilerFactory(
     reader=Reader,
     path_dependency=DatasetPathParams,
-    add_ogc_maps=True, 
+    add_ogc_maps=True,
     templates=titiler_templates,
     router_prefix="/dataset/{dataset_id}/years/{year}",
 )
