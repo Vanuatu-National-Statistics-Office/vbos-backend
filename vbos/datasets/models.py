@@ -57,7 +57,7 @@ class RasterFile(models.Model):
         unique=True,
         validators=[
             FileExtensionValidator(
-                allowed_extensions=["tiff", "tif", "geotiff", "gtiff"]
+                allowed_extensions=["tiff", "tif", "geotiff", "gtiff", "vrt"]
             )
         ],
     )
