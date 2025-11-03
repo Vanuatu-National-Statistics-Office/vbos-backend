@@ -135,6 +135,9 @@ class TabularItemSerializer(serializers.ModelSerializer):
 
 
 class TabularItemExcelSerializer(serializers.ModelSerializer):
+    province = serializers.ReadOnlyField(source="province.name")
+    area_council = serializers.ReadOnlyField(source="area_council.name")
+
     # Dynamically add fields based on all possible keys in the data
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -158,4 +161,11 @@ class TabularItemExcelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TabularItem
-        fields = ["id"]
+        fields = [
+            "id",
+            "attribute",
+            "date",
+            "value",
+            "province",
+            "area_council",
+        ]
