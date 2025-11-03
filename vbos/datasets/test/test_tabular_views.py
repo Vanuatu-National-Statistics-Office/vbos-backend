@@ -163,6 +163,10 @@ class TestTabularDatasetDataView(APITestCase):
         assert req.data.get("results")[0]["attribute"] == "Employed Population"
         assert req.data.get("results")[0]["additional_value"] == "test"
 
+        # test xlsx format
+        req = self.client.get(url, {"format": "xlsx"})
+        assert req.status_code == status.HTTP_200_OK
+
     def test_filter_data(self):
         url = reverse("datasets:tabular-data", args=[self.dataset_2.id])
         req = self.client.get(url, {"date_after": "2025-01-01"})

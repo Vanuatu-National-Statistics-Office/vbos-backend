@@ -20,7 +20,6 @@ class ClusterSerializer(serializers.ModelSerializer):
 
 
 class ProvinceSerializer(GeoFeatureModelSerializer):
-
     class Meta:
         model = Province
         geo_field = "geometry"
@@ -28,7 +27,6 @@ class ProvinceSerializer(GeoFeatureModelSerializer):
 
 
 class AreaCouncilSerializer(GeoFeatureModelSerializer):
-
     class Meta:
         model = AreaCouncil
         geo_field = "geometry"
@@ -146,8 +144,8 @@ class TabularItemExcelSerializer(serializers.ModelSerializer):
             queryset = self.context["view"].get_queryset()
             all_keys = set()
             for item in queryset:
-                if item.data and isinstance(item.data, dict):
-                    all_keys.update(item.data.keys())
+                if item.metadata and isinstance(item.metadata, dict):
+                    all_keys.update(item.metadata.keys())
 
             # Create a field for each key
             for key in all_keys:

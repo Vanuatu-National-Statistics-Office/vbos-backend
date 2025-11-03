@@ -91,14 +91,14 @@ class VectorItemAdmin(admin.GISModelAdmin):
                             VectorItem.objects.create(
                                 dataset=form.cleaned_data["dataset"],
                                 metadata=metadata.properties,
-                                name=metadata.name,
+                                name=metadata.name.strip(),
                                 ref=metadata.ref,
-                                attribute=metadata.attribute,
+                                attribute=metadata.attribute.strip(),
                                 province=Province.objects.filter(
-                                    name__iexact=metadata.province
+                                    name__iexact=metadata.province.strip()
                                 ).first(),
                                 area_council=AreaCouncil.objects.filter(
-                                    name__iexact=metadata.area_council
+                                    name__iexact=metadata.area_council.strip()
                                 ).first(),
                                 geometry=GEOSGeometry(json.dumps(item["geometry"])),
                             )
@@ -184,7 +184,7 @@ class TabularItemAdmin(admin.GISModelAdmin):
                             TabularItem.objects.create(
                                 dataset=form.cleaned_data["dataset"],
                                 metadata=csv_row.metadata,
-                                attribute=csv_row.attribute,
+                                attribute=csv_row.attribute.strip(),
                                 value=csv_row.value,
                                 date=csv_row.date,
                                 province=Province.objects.filter(
