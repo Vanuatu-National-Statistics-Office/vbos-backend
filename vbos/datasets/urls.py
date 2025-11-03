@@ -43,4 +43,9 @@ urlpatterns = [
         views.TabularDatasetDataView.as_view(),
         name="tabular-data",
     ),
+    path(
+        "tabular/<int:pk>/data-xlsx/",
+        views.TabularDatasetXSLXDataView.as_view(),
+        name="tabular-data-xlsx",
+    ),
 ]

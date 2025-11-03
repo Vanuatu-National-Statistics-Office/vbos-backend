@@ -163,10 +163,6 @@ class TestTabularDatasetDataView(APITestCase):
         assert req.data.get("results")[0]["attribute"] == "Employed Population"
         assert req.data.get("results")[0]["additional_value"] == "test"
 
-        # test xlsx format
-        req = self.client.get(url, {"format": "xlsx"})
-        assert req.status_code == status.HTTP_200_OK
-
     def test_filter_data(self):
         url = reverse("datasets:tabular-data", args=[self.dataset_2.id])
         req = self.client.get(url, {"date_after": "2025-01-01"})
@@ -199,3 +195,15 @@ class TestTabularDatasetDataView(APITestCase):
         req = self.client.get(url, {"attribute": "population"})
         assert req.status_code == status.HTTP_200_OK
         assert req.data.get("count") == 4
+
+    def test_xlsx_format(self):
+        url = reverse("datasets:tabular-data-xlsx", args=[self.dataset_1.id])
+        req = self.client.get(url)
+        assert req.status_code == status.HTTP_200_OK
+        assert (
+            req.headers["Content-Type"]
+            == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8"
+        )
+        assert req.headers[
+            "content-disposition"
+        ] == "attachment; filename=vbos-mis-tabular-{}.xlsx".format(self.dataset_1.id)
