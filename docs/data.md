@@ -19,20 +19,20 @@ On the Administrative Interface, click on Clusters, then on `Add Cluster` button
 
 You will see a form like this. Add a name and click on Save.
 
-<img width="1114" height="460" alt="image" src="https://github.com/user-attachments/assets/c7f62081-3d2f-4fa7-8b24-0a8c032a018c" />
+<img width="50%" alt="image" src="https://github.com/user-attachments/assets/c7f62081-3d2f-4fa7-8b24-0a8c032a018c" />
 
 If you need to modify or delete a Cluster, you can do it by accessing the Cluster list page in the administrative interface.
 
 Clicking on the id of the cluster, you will have access to the form to modify it. If you need to delete clusters, select it and then click on the action dropdown and select `Delete selected clusters`. Finally, click on the `Go` button.
 
-<img width="1124" height="1284" alt="image" src="https://github.com/user-attachments/assets/01f27226-566e-44c4-b279-6c818b53ff2e" />
+<img width="50%" alt="image" src="https://github.com/user-attachments/assets/01f27226-566e-44c4-b279-6c818b53ff2e" />
 
 
 ### Creating datasets
 
 The exact same pattern applies when creating Raster, Vector or Tabular datasets. Here you can see the Raster Dataset creation form:
 
-<img width="2768" height="1426" alt="image" src="https://github.com/user-attachments/assets/01a838fb-8ab1-4cef-bab7-e1ebf624fa8e" />
+<img width="100%" alt="image" src="https://github.com/user-attachments/assets/01a838fb-8ab1-4cef-bab7-e1ebf624fa8e" />
 
 The forms to create Vector and Tabular datasets are very similar to the Raster one.
 
@@ -48,7 +48,7 @@ Click on the `Tabular Items` link in the Administrative Interface homepage. Then
 
 Once clicked, you will see a form like this, where you can upload a CSV file and select the dataset to which the data belongs to:
 
-<img width="1666" height="428" alt="image" src="https://github.com/user-attachments/assets/2702ae31-a4ec-4cfa-b782-7045876314c4" />
+<img width="80%" alt="image" src="https://github.com/user-attachments/assets/2702ae31-a4ec-4cfa-b782-7045876314c4" />
 
 The CSV file needs to be separated by commas and should have the following columns:
 
@@ -69,7 +69,7 @@ Click on the `Vector Items` link in the Administrative Interface homepage. Then,
 
 Once clicked, you will see a form like this, where you can upload a GeoJSON file and select the dataset to which the data belongs to:
 
-<img width="660" height="442" alt="image" src="https://github.com/user-attachments/assets/e65938e5-43b0-405d-9fdd-446b182a4e88" />
+<img width="50%" alt="image" src="https://github.com/user-attachments/assets/e65938e5-43b0-405d-9fdd-446b182a4e88" />
 
 If you have never worked with GeoJSON files, you can convert any geospatial data format to GeoJSON using QGIS or ArcGis. The items in the GeoJSON file should have the following columsn:
 
