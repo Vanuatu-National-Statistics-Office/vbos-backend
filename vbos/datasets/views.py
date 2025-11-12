@@ -1,9 +1,11 @@
-from django.shortcuts import render
 import django_filters.rest_framework
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework_gis.pagination import GeoJsonPagination
 from rest_framework_gis.filters import InBBoxFilter
+from drf_excel.mixins import XLSXFileMixin
+from drf_excel.renderers import XLSXRenderer
+
 
 from vbos.datasets.filters import (
     RasterDatasetFilter,
@@ -122,12 +124,16 @@ class TabularDatasetDetailView(RetrieveAPIView):
 class TabularDatasetDataView(ListAPIView):
     filterset_class = TabularItemFilter
     permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = TabularItemSerializer
 
     def get_queryset(self):
         return TabularItem.objects.filter(dataset=self.kwargs.get("pk"))
 
-    def get_serializer_class(self):
-        # Use different serializer for Excel format
-        if self.request.query_params.get("format") == "xlsx":
-            return TabularItemExcelSerializer
-        return TabularItemSerializer
+
+class TabularDatasetXSLXDataView(XLSXFileMixin, TabularDatasetDataView):
+    serializer_class = TabularItemExcelSerializer
+    renderer_classes = (XLSXRenderer,)
+    pagination_class = None
+
+    def get_filename(self, request, *args, **kwargs):
+        return f"vbos-mis-tabular-{kwargs.get('pk')}.xlsx"

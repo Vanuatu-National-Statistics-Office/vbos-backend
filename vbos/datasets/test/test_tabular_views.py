@@ -195,3 +195,15 @@ class TestTabularDatasetDataView(APITestCase):
         req = self.client.get(url, {"attribute": "population"})
         assert req.status_code == status.HTTP_200_OK
         assert req.data.get("count") == 4
+
+    def test_xlsx_format(self):
+        url = reverse("datasets:tabular-data-xlsx", args=[self.dataset_1.id])
+        req = self.client.get(url)
+        assert req.status_code == status.HTTP_200_OK
+        assert (
+            req.headers["Content-Type"]
+            == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8"
+        )
+        assert req.headers[
+            "content-disposition"
+        ] == "attachment; filename=vbos-mis-tabular-{}.xlsx".format(self.dataset_1.id)
