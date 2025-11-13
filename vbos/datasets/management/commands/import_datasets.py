@@ -32,11 +32,13 @@ class Command(BaseCommand):
                     type,
                 ) not in datasets:
                     TabularDataset.objects.create(
-                        name=row["Indicator"],
-                        cluster=Cluster.objects.get_or_create(name=row["Cluster"])[0],
+                        name=row["Indicator"].strip(),
+                        cluster=Cluster.objects.get_or_create(
+                            name=row["Cluster"].strip()
+                        )[0],
                         type=type,
-                        unit=row["Unit"],
-                        source=row["Source"],
+                        unit=row["Unit"].strip(),
+                        source=row["Source"].strip(),
                     )
                     datasets.append(
                         (

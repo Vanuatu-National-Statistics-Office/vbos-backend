@@ -18,7 +18,27 @@ class TestImportDatasets(TestCase):
         self.assertIn(
             "2 datasets created from {}.".format(self.filename), self.out.getvalue()
         )
+        self.assertEqual(
+            TabularDataset.objects.get(name="Number Schools").unit, "number"
+        )
+        self.assertEqual(
+            TabularDataset.objects.get(name="Health Facility").unit, "number"
+        )
+        self.assertEqual(
+            TabularDataset.objects.get(name="Number Schools").source,
+            "Ministry of Education and Training",
+        )
+        self.assertEqual(
+            TabularDataset.objects.get(name="Health Facility").source,
+            "Ministry of Health",
+        )
         self.assertEqual(TabularItem.objects.count(), 63)
+        self.assertEqual(
+            TabularItem.objects.filter(dataset__name="Number Schools").count(), 31
+        )
+        self.assertEqual(
+            TabularItem.objects.filter(dataset__name="Health Facility").count(), 32
+        )
         self.assertIn(
             "63 tabular items created",
             self.out.getvalue(),
