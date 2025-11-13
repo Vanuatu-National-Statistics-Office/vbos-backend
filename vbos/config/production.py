@@ -48,4 +48,5 @@ class Production(Common):
         "https://vbos.ds.io",
         "https://28c1de977ab0e5742601b8e5a775e5e0.cloudfront.net",
         "https://d3t1f2htm7mtkw.cloudfront.net",
+        "https://vbos-frontend-xp8cg.ondigitalocean.app",
     ]
