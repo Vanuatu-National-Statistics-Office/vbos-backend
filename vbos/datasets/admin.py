@@ -2,14 +2,15 @@ import csv
 import json
 from io import TextIOWrapper
 
-from django.contrib.gis import admin
 from django.contrib import messages
+from django.contrib.gis import admin
 from django.contrib.gis.geos.geometry import GEOSGeometry
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import redirect, render, reverse
 from django.urls import path
 
-from vbos.datasets.utils import CSVRow, GeoJSONProperties
+from vbos.datasets.utils import GeoJSONProperties
 
+from .forms import CSVUploadForm, GeoJSONUploadForm
 from .models import (
     AreaCouncil,
     Cluster,
@@ -21,7 +22,7 @@ from .models import (
     VectorDataset,
     VectorItem,
 )
-from .forms import CSVUploadForm, GeoJSONUploadForm
+from .utils import CSVRow, create_tabular_item
 
 
 @admin.register(Cluster)
@@ -178,22 +179,10 @@ class TabularItemAdmin(admin.GISModelAdmin):
                     created_count = 0
                     error_count = 0
 
-                    for row in reader:  # start=2 to account for header row
+                    for row in reader:
                         try:
                             csv_row = CSVRow(row)
-                            TabularItem.objects.create(
-                                dataset=form.cleaned_data["dataset"],
-                                metadata=csv_row.metadata,
-                                attribute=csv_row.attribute.strip(),
-                                value=csv_row.value,
-                                date=csv_row.date,
-                                province=Province.objects.filter(
-                                    name__iexact=csv_row.province
-                                ).first(),
-                                area_council=AreaCouncil.objects.filter(
-                                    name__iexact=csv_row.area_council
-                                ).first(),
-                            )
+                            create_tabular_item(csv_row, form.cleaned_data["dataset"])
                             created_count += 1
                         except Exception as e:
                             print(e)

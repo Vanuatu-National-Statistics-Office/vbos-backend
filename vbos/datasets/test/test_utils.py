@@ -1,7 +1,8 @@
 from datetime import date
+
 from django.test import TestCase
 
-from vbos.datasets.utils import CSVRow, GeoJSONProperties
+from vbos.datasets.utils import CSVRow, GeoJSONProperties, group_by_dataset
 
 
 class TestGeoJSONProperties(TestCase):
@@ -65,3 +66,61 @@ class TestCsvRow(TestCase):
         assert self.r2.province == "TAFEA"
         assert self.r2.area_council == "Futuna"
         assert self.r2.value == "154.2"
+
+
+class TestGroupByDataset(TestCase):
+    def setUp(self):
+        self.data = [
+            {
+                "Type": "Baseline",
+                "Cluster": "Education",
+                "Indicator": "Number Schools",
+                "Attribute": "ecce",
+                "Value": 32,
+                "Province": "TORBA",
+                "Area Council": "East Gaua",
+                "Year": "2023",
+                "Month": "January",
+            },
+            {
+                "Type": "Baseline",
+                "Cluster": "Education",
+                "Indicator": "Number Teachers",
+                "Attribute": "primary",
+                "Value": 334,
+                "Province": "TORBA",
+                "Area Council": "East Gaua",
+                "Year": "2023",
+                "Month": "January",
+            },
+            {
+                "Type": "Baseline",
+                "Cluster": "Education",
+                "Indicator": "Number Schools",
+                "Attribute": "tertiary",
+                "Value": 32,
+                "Province": "TORBA",
+                "Area Council": "East Gaua",
+                "Year": "2023",
+                "Month": "January",
+            },
+            {
+                "Type": "Baseline",
+                "Cluster": "Education",
+                "Indicator": "Number Teachers",
+                "Attribute": "secondary",
+                "Value": 534,
+                "Province": "TORBA",
+                "Area Council": "East Gaua",
+                "Year": "2023",
+                "Month": "January",
+            },
+        ]
+
+    def test_group_by_dataset_function(self):
+        result = group_by_dataset(self.data)
+        self.assertEqual(len(result), 2)
+        self.assertEqual(len(result[0]["items"]), 2)
+        self.assertEqual(len(result[1]["items"]), 2)
+        self.assertEqual(result[0]["items"][0]["Attribute"], "ecce")
+        self.assertEqual(result[0]["items"][1]["Attribute"], "tertiary")
