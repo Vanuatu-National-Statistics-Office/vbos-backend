@@ -44,6 +44,16 @@ class TestImportDatasets(TestCase):
             "55 tabular items created",
             self.out.getvalue(),
         )
+        self.assertEqual(
+            len(
+                [
+                    i[1]
+                    for i in TabularItem.objects.first().metadata.items()
+                    if i[1] == ""
+                ]
+            ),
+            0,
+        )
 
         # Clean redundant entries
         call_command("clean_tabular_data", stdout=self.out)

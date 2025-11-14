@@ -1,10 +1,11 @@
 from datetime import date
+
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.urls import reverse
 
-from ..models import AreaCouncil, Cluster, Province, TabularDataset, TabularItem
 from ...users.test.factories import UserFactory
+from ..models import AreaCouncil, Cluster, Province, TabularDataset, TabularItem
 
 
 class TestTabularDatasetListDetailViews(APITestCase):
@@ -79,7 +80,7 @@ class TestTabularDatasetDataView(APITestCase):
             date=date(2025, 1, 1),
             province=Province.objects.get(name="TORBA"),
             attribute="Population",
-            value=13874,
+            value=float("13874"),
         )
         TabularItem.objects.create(
             dataset=self.dataset_1,

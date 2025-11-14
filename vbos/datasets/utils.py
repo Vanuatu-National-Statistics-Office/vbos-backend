@@ -52,6 +52,7 @@ class CSVRow:
         except ValueError:
             self.date = None
         self.remove_keys()
+        self.clean_metadata()
 
     def get_property(self, keys: List[str]) -> str:
         value = ""
@@ -66,6 +67,7 @@ class CSVRow:
     def remove_keys(self):
         keys = [
             "Unit",
+            "National",
             "Source",
             "Year Collected",
             "Frequency Collection",
@@ -119,9 +121,9 @@ REVERSE_TYPE_MAPPING = {str(label): value for (value, label) in TYPE_CHOICES.ite
 
 def get_dataset(row):
     return TabularDataset.objects.get(
-        name=row["Indicator"],
-        cluster=Cluster.objects.get_or_create(name=row["Cluster"])[0],
-        type=REVERSE_TYPE_MAPPING[row["Type"]],
+        name=row["Indicator"].strip(),
+        cluster=Cluster.objects.get_or_create(name=row["Cluster"].strip())[0],
+        type=REVERSE_TYPE_MAPPING[row["Type"]] if row["Type"] else "baseline",
     )
 
 
@@ -130,7 +132,7 @@ def create_tabular_item(csv_row: CSVRow, dataset: TabularDataset):
         dataset=dataset,
         metadata=csv_row.metadata,
         attribute=csv_row.attribute.strip(),
-        value=csv_row.value,
+        value=float(csv_row.value.replace(",", "")),
         date=csv_row.date,
         province=Province.objects.filter(name__iexact=csv_row.province).first(),
         area_council=AreaCouncil.objects.filter(
