@@ -32,14 +32,25 @@ class TestImportDatasets(TestCase):
             TabularDataset.objects.get(name="Health Facility").source,
             "Ministry of Health",
         )
-        self.assertEqual(TabularItem.objects.count(), 63)
+        # Test TabularItem import
+        self.assertEqual(TabularItem.objects.count(), 55)
         self.assertEqual(
             TabularItem.objects.filter(dataset__name="Number Schools").count(), 31
         )
         self.assertEqual(
-            TabularItem.objects.filter(dataset__name="Health Facility").count(), 32
+            TabularItem.objects.filter(dataset__name="Health Facility").count(), 24
         )
         self.assertIn(
-            "63 tabular items created",
+            "55 tabular items created",
             self.out.getvalue(),
+        )
+
+        # Clean redundant entries
+        call_command("clean_tabular_data", stdout=self.out)
+        self.assertEqual(TabularItem.objects.count(), 30)
+        self.assertEqual(
+            TabularItem.objects.filter(dataset__name="Number Schools").count(), 10
+        )
+        self.assertEqual(
+            TabularItem.objects.filter(dataset__name="Health Facility").count(), 20
         )

@@ -2,9 +2,8 @@ import csv
 
 from django.core.management.base import BaseCommand
 
-from ...models import TYPE_CHOICES, Cluster, TabularDataset
-
-REVERSE_TYPE_MAPPING = {str(label): value for (value, label) in TYPE_CHOICES.items()}
+from ...models import Cluster, TabularDataset
+from ...utils import REVERSE_TYPE_MAPPING
 
 
 class Command(BaseCommand):

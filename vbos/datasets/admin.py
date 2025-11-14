@@ -8,7 +8,7 @@ from django.contrib.gis.geos.geometry import GEOSGeometry
 from django.shortcuts import redirect, render, reverse
 from django.urls import path
 
-from vbos.datasets.utils import GeoJSONProperties
+from vbos.datasets.utils import GeoJSONProperties, clean_redundant_tabular_items
 
 from .forms import CSVUploadForm, GeoJSONUploadForm
 from .models import (
@@ -137,6 +137,21 @@ class VectorItemAdmin(admin.GISModelAdmin):
 class TabularDatasetAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "cluster", "type", "updated"]
     list_filter = ["cluster", "type"]
+    actions = ["clean_redundant_items"]
+
+    @admin.action(description="Clean redundant TabularItems for dataset")
+    def clean_redundant_items(self, request, queryset):
+        for dataset in queryset:
+            clean_redundant_tabular_items(dataset)
+
+        dataset_names = list(queryset.values_list("name", flat=True))
+        if len(dataset_names) == 1:
+            message = f"Cleaned redundant values for: {dataset_names[0]}."
+        else:
+            # Join all but last with commas, then add "and" before last item
+            message = f"Cleaned redundant values for: {', '.join(dataset_names[:-1])} and {dataset_names[-1]}."
+
+        messages.success(request, message)
 
 
 @admin.register(TabularItem)

@@ -137,3 +137,16 @@ def create_tabular_item(csv_row: CSVRow, dataset: TabularDataset):
             name__iexact=csv_row.area_council
         ).first(),
     )
+
+
+def clean_redundant_tabular_items(dataset: TabularDataset):
+    items = TabularItem.objects.filter(dataset=dataset)
+    # If a dataset has items with an Area Council value,
+    # remove all items that don't have the Area Council set
+    if items.filter(area_council__isnull=False).count() > 0:
+        items.filter(area_council__isnull=True).delete()
+
+    # If a dataset has items with a Province value,
+    # remove all items that don't have the Province set
+    if items.filter(province__isnull=False).count() > 0:
+        items.filter(province__isnull=True).delete()
