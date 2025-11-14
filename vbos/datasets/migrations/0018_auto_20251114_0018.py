@@ -24,7 +24,7 @@ def update_area_councils_names(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("datasets", "0016_alter_rasterdataset_unique_together_and_more"),
+        ("datasets", "0017_alter_rasterfile_file"),
     ]
 
     operations = [
