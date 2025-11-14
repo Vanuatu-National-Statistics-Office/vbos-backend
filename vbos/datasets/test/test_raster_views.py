@@ -1,28 +1,22 @@
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.urls import reverse
 
 from ..models import Cluster, RasterDataset, RasterFile
 
 
 class TestRasterDatasetListDetailViews(APITestCase):
     def setUp(self):
-        self.r_1 = RasterFile.objects.create(
-            name="Rainfall COG", file="raster/rainfall.tiff"
-        )
-        self.r_2 = RasterFile.objects.create(
-            name="Coastline COG", file="raster/coastline.tiff"
-        )
         self.dataset_1 = RasterDataset.objects.create(
             name="Rainfall",
             description="Rainfall data since 2020",
             cluster=Cluster.objects.create(name="Environment"),
-            file=self.r_1,
+            filename_id="rainfall",
             source="WMO",
         )
         self.dataset_2 = RasterDataset.objects.create(
             name="Coastline changes",
-            file=self.r_2,
+            filename_id="population_baseline",
             source="OSM",
             cluster=Cluster.objects.create(name="Administrative"),
             type="estimated_damage",
@@ -64,7 +58,7 @@ class TestRasterDatasetListDetailViews(APITestCase):
         req = self.client.get(url)
         assert req.status_code == status.HTTP_200_OK
         assert req.data.get("name") == "Rainfall"
-        assert req.data.get("file") == "/media/raster/rainfall.tiff"
+        assert req.data.get("filename_id") == "rainfall"
         assert req.data.get("created")
         assert req.data.get("updated")
         assert req.data.get("source") == "WMO"

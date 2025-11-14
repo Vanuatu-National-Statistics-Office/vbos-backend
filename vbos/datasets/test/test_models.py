@@ -1,8 +1,7 @@
-from django.db.models.deletion import ProtectedError
+from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.utils import IntegrityError
 from django.test import TestCase
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.exceptions import ValidationError
 
 from vbos.datasets.models import (
     Cluster,
@@ -25,14 +24,10 @@ class TestRasterModels(TestCase):
         self.dataset = RasterDataset.objects.create(
             name="Rainfall",
             cluster=Cluster.objects.create(name="Environment"),
-            file=self.r_1,
+            filename_id="rainfall",
         )
 
     def test_deletion(self):
-        # RasterFile can't be deleted if it's associates with a dataset
-        with self.assertRaises(ProtectedError):
-            self.r_1.delete()
-
         # name should be unique
         raster = RasterFile(name="Rainfall COG 2", file="raster/coastline.tiff")
         with self.assertRaises(ValidationError):
@@ -43,15 +38,9 @@ class TestRasterModels(TestCase):
         with self.assertRaises(ValidationError):
             raster.full_clean()
 
-        # modify dataset
-        self.dataset.file = self.r_2
-        self.dataset.save()
         # delete file
         self.r_1.delete()
         self.assertEqual(RasterFile.objects.count(), 1)
-        # delete dataset
-        self.dataset.delete()
-        self.assertEqual(RasterDataset.objects.count(), 0)
         # delete remaining file
         self.r_2.delete()
         self.assertEqual(RasterFile.objects.count(), 0)
@@ -75,20 +64,20 @@ class TestRasterModels(TestCase):
             name="Population",
             cluster=self.cluster,
             source="Government",
-            file=r_2,
+            filename_id="population_baseline",
         )
         RasterDataset.objects.create(
             name="Population",
             cluster=self.cluster,
             source="Government",
-            file=r_2,
+            filename_id="population_damage",
             type="estimated_damage",
         )
         RasterDataset.objects.create(
             name="Population",
             cluster=Cluster.objects.create(name="Education"),
             source="Government",
-            file=r_2,
+            filename_id="population_education_damage",
             type="estimated_damage",
         )
         with self.assertRaises(IntegrityError):
@@ -96,7 +85,7 @@ class TestRasterModels(TestCase):
                 name="Population",
                 cluster=self.cluster,
                 source="Government",
-                file=r_2,
+                filename_id="population_baseline",
             )
 
 
