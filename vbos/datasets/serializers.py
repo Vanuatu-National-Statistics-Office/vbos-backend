@@ -34,7 +34,6 @@ class AreaCouncilSerializer(GeoFeatureModelSerializer):
 
 
 class RasterDatasetSerializer(serializers.ModelSerializer):
-    file = serializers.ReadOnlyField(source="file.file.url")
     cluster = serializers.ReadOnlyField(source="cluster.name")
 
     class Meta:
@@ -48,7 +47,7 @@ class RasterDatasetSerializer(serializers.ModelSerializer):
             "cluster",
             "type",
             "source",
-            "file",
+            "filename_id",
         ]
 
 

@@ -37,7 +37,7 @@ class RasterFileAdmin(admin.ModelAdmin):
 
 @admin.register(RasterDataset)
 class RasterDatasetAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "cluster", "type", "updated", "file"]
+    list_display = ["id", "name", "cluster", "type", "updated", "filename_id"]
     list_filter = ["cluster", "type"]
 
 

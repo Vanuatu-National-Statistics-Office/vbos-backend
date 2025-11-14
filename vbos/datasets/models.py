@@ -1,10 +1,10 @@
-from django.contrib.gis.db import models
 from django.conf import settings
-from django.utils.translation import gettext_lazy as _
+from django.contrib.gis.db import models
 from django.core.validators import FileExtensionValidator
 from django.db.models.fields.files import default_storage
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
 
 UPLOAD_TO = "staging/raster/" if settings.DEBUG else "production/raster/"
 
@@ -91,7 +91,13 @@ class RasterDataset(models.Model):
     )
     type = models.CharField(max_length=55, choices=TYPE_CHOICES, default="baseline")
     source = models.CharField(max_length=155, blank=True, null=True)
-    file = models.ForeignKey(RasterFile, on_delete=models.PROTECT)
+    filename_id = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text="The filename id that will be used to compose the raster file path. The pattern will be {}/{}_{}.vrt".format(
+            settings.MEDIA_URL, "{filename_id}", "{year}"
+        ),
+    )
 
     def __str__(self):
         return f"{self.name} - {self.cluster} / {self.type}"
