@@ -27,7 +27,7 @@ class Command(BaseCommand):
 
                     created_count += 1
                 except Exception as e:
-                    print(e)
+                    print(f"{e}: {row}")
                     error_count += 1
 
             self.stdout.write(f"{created_count} tabular items created from {filename}.")

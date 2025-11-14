@@ -24,10 +24,14 @@ class Command(BaseCommand):
             ]
 
             for row in reader:
-                type = REVERSE_TYPE_MAPPING[row["Type"]]
+                type = (
+                    REVERSE_TYPE_MAPPING[row["Type"].strip()]
+                    if row["Type"]
+                    else "baseline"
+                )
                 if (
-                    row["Indicator"],
-                    row["Cluster"],
+                    row["Indicator"].strip(),
+                    row["Cluster"].strip(),
                     type,
                 ) not in datasets:
                     TabularDataset.objects.create(
@@ -41,8 +45,8 @@ class Command(BaseCommand):
                     )
                     datasets.append(
                         (
-                            row["Indicator"],
-                            row["Cluster"],
+                            row["Indicator"].strip(),
+                            row["Cluster"].strip(),
                             type,
                         )
                     )
