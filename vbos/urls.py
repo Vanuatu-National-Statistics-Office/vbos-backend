@@ -1,13 +1,11 @@
 from django.conf import settings
-from django.urls import path, re_path, include, reverse_lazy
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.views.generic.base import RedirectView
-from rest_framework.authtoken import views
+from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from rest_framework.authtoken import views
 
-from .users.views import UserViewSet
-
+admin.site.site_header = "VBoS MIS"
 API_BASE_URL = "api/v1"
 
 api_urls = [
