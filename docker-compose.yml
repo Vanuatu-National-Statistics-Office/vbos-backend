@@ -40,7 +40,10 @@ services:
     ports:
       - "8001:8001"
   titiler:
-    image: ghcr.io/developmentseed/titiler:latest
+    build:
+      context: .
+      dockerfile: tiler/Dockerfile
+    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
     container_name: titiler
     platform: linux/amd64
     environment:
