@@ -1,6 +1,6 @@
 FROM ghcr.io/developmentseed/titiler:latest
 
-COPY tiler/app.py app.py
+COPY deploy/tiler/app.py app.py
 
 ENV MODULE_NAME=app
 ENV VARIABLE_NAME=app
