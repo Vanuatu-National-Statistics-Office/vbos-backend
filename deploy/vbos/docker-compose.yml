@@ -32,7 +32,7 @@ services:
       caddy.handle.root: "* /www/html"
       caddy.handle.file_server:
   titiler:
-    image: ghcr.io/developmentseed/vbos-titiler:latest
+    image: ghcr.io/developmentseed/vbos-titiler:main
     container_name: titiler
     platform: linux/amd64
     environment:
