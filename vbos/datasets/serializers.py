@@ -48,6 +48,7 @@ class RasterDatasetSerializer(serializers.ModelSerializer):
             "type",
             "source",
             "filename_id",
+            "titiler_url_params",
         ]
 
 
