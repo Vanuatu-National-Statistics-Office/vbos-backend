@@ -65,6 +65,7 @@ class TestRasterModels(TestCase):
             cluster=self.cluster,
             source="Government",
             filename_id="population_baseline",
+            titiler_url_params="rescale=-0.3,0.3",
         )
         RasterDataset.objects.create(
             name="Population",

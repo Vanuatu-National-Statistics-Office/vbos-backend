@@ -98,6 +98,12 @@ class RasterDataset(models.Model):
             settings.MEDIA_URL, "{filename_id}", "{year}"
         ),
     )
+    titiler_url_params = models.CharField(
+        max_length=1000,
+        blank=True,
+        null=True,
+        help_text="Additional URL params that should be added to the Titiler URL request by the frontend app.",
+    )
 
     def __str__(self):
         return f"{self.name} - {self.cluster} / {self.type}"

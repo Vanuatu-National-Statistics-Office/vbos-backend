@@ -13,6 +13,7 @@ class TestRasterDatasetListDetailViews(APITestCase):
             cluster=Cluster.objects.create(name="Environment"),
             filename_id="rainfall",
             source="WMO",
+            titiler_url_params="rescale=-0.3,0.3",
         )
         self.dataset_2 = RasterDataset.objects.create(
             name="Coastline changes",
@@ -20,6 +21,7 @@ class TestRasterDatasetListDetailViews(APITestCase):
             source="OSM",
             cluster=Cluster.objects.create(name="Administrative"),
             type="estimated_damage",
+            titiler_url_params="rescale=-0.5,0.5",
         )
         self.url = reverse("datasets:raster-list")
 
@@ -36,6 +38,8 @@ class TestRasterDatasetListDetailViews(APITestCase):
         assert req.data.get("results")[1]["source"] == "OSM"
         assert req.data.get("results")[0]["type"] == "baseline"
         assert req.data.get("results")[1]["type"] == "estimated_damage"
+        assert req.data.get("results")[0]["titiler_url_params"] == "rescale=-0.3,0.3"
+        assert req.data.get("results")[1]["titiler_url_params"] == "rescale=-0.5,0.5"
 
     def test_raster_datasets_list_filter(self):
         req = self.client.get(self.url, {"cluster": "transportation"})
@@ -64,6 +68,7 @@ class TestRasterDatasetListDetailViews(APITestCase):
         assert req.data.get("source") == "WMO"
         assert req.data.get("cluster") == "Environment"
         assert req.data.get("description") == "Rainfall data since 2020"
+        assert req.data.get("titiler_url_params") == "rescale=-0.3,0.3"
 
     def tearDown(self):
         RasterDataset.objects.all().delete()
