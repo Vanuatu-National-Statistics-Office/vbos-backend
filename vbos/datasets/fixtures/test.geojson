@@ -5,6 +5,10 @@
       "type": "Feature",
       "properties": {
         "name": "Area 1",
+        "PID": 2,
+        "part": null,
+        "key": "",
+        "key_2": "null",
         "ref": "12NC",
         "Province": "Torba",
         "Area Council": "East Gaua",
@@ -44,9 +48,9 @@
       "properties": {
         "name": "Line 1",
         "ref": "13NC",
-        "Province": "TAFEA",
-        "Area Council": "Futuna",
-        "Attribute": "Roads"
+        "Pname_2": "TAFEA",
+        "AC_NAME": "Futuna",
+        "Type": "Roads"
     },
       "geometry": {
         "coordinates": [
@@ -67,8 +71,9 @@
       "properties": {
         "name": "Point 2",
         "ref": "14NC",
-        "Province": "TAFEA",
-        "Area Council": "Futuna",
+        "PID": 1,
+        "Pname": "TAFEA",
+        "ACNAME22": "Futuna",
         "Attribute": "Business",
         "source": "OpenStreetMap"
       },

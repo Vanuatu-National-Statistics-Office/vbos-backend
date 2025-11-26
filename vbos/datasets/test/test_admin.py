@@ -1,8 +1,8 @@
-from datetime import date
 import io
+from datetime import date
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.urls import reverse
 
 from vbos.datasets.models import (
@@ -136,6 +136,11 @@ class VectorItemAdminImportFileTests(TestCase):
         self.assertEqual(vi_1.attribute, "Schools")
         self.assertEqual(vi_1.province.name, "TORBA")
         self.assertEqual(vi_1.area_council.name, "East Gaua")
+        self.assertFalse("PID" in vi_1.metadata.keys())
+        self.assertFalse("part" in vi_1.metadata.keys())
+        self.assertFalse("key" in vi_1.metadata.keys())
+        self.assertFalse("key_2" in vi_1.metadata.keys())
+        self.assertTrue("extra" in vi_1.metadata.keys())
         self.assertEqual(vi_2.dataset.id, self.dataset.id)
         self.assertEqual(vi_2.name, "Line 1")
         self.assertEqual(vi_2.ref, "13NC")
