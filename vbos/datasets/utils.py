@@ -16,12 +16,28 @@ class GeoJSONProperties:
     def __init__(self, properties: Dict):
         self.properties = properties
         self.area_council = self.get_property(
-            ["Area Council", "area_council", "area council", "Area council"]
+            [
+                "Area Council",
+                "area_council",
+                "area council",
+                "Area council",
+                "AC_NAME",
+                "area_council_name",
+                "ACNAME22",
+                "ACNAME22_2",
+            ]
         )
-        self.province = self.get_property(["Province", "province"])
+        self.province = self.get_property(
+            ["Province", "province", "Pname", "province_name", "Pname_2"]
+        )
         self.name = self.get_property(["Name", "name"])
-        self.ref = self.get_property(["ref", "Ref", "REF"])
-        self.attribute = self.get_property(["Attribute", "attribute"])
+        self.ref = self.get_property(["ref", "Ref", "REF", "id"])
+        self.attribute = self.get_property(
+            ["Attribute", "attribute", "Type", "type", "TYPE"]
+        )
+
+        self.clean_properties()
+        self.remove_keys()
 
     def get_property(self, keys: List[str]) -> str:
         value = ""
@@ -32,6 +48,28 @@ class GeoJSONProperties:
             except KeyError:
                 pass
         return value
+
+    def clean_properties(self):
+        empty_keys = [
+            i[0] for i in self.properties.items() if not i[1] or i[1] == "null"
+        ]
+        for key in empty_keys:
+            self.properties.pop(key)
+
+    def remove_keys(self):
+        keys = [
+            "PID",
+            "PID_2",
+            "Pname_2",
+            "AC2022",
+            "AC2022_2",
+            "ACNAME22_2",
+        ]
+        for key in keys:
+            try:
+                self.properties.pop(key)
+            except KeyError:
+                pass
 
 
 class CSVRow:
