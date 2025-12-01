@@ -127,9 +127,9 @@ class VectorItemAdminImportFileTests(TestCase):
                 {"file": file_data, "dataset": self.dataset.id},
                 follow=True,
             )
-        self.assertContains(response, "Successfully created 3 new records")
-        self.assertEqual(VectorItem.objects.count(), 3)
-        vi_1, vi_2, vi_3 = VectorItem.objects.all()
+        self.assertContains(response, "Successfully created 4 new records")
+        self.assertEqual(VectorItem.objects.count(), 4)
+        vi_1, vi_2, vi_3, vi_4 = VectorItem.objects.all()
         self.assertEqual(vi_1.dataset.id, self.dataset.id)
         self.assertEqual(vi_1.name, "Area 1")
         self.assertEqual(vi_1.ref, "12NC")
@@ -154,3 +154,6 @@ class VectorItemAdminImportFileTests(TestCase):
         self.assertEqual(vi_3.province.name, "TAFEA")
         self.assertEqual(vi_3.area_council.name, "Futuna")
         self.assertEqual(vi_3.metadata["source"], "OpenStreetMap")
+        self.assertEqual(vi_4.ref, "199163611")
+        self.assertIsNone(vi_4.province)
+        self.assertIsNone(vi_4.area_council)
