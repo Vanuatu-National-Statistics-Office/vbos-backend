@@ -89,18 +89,33 @@ class VectorItemAdmin(admin.GISModelAdmin):
                     for item in geojson_content["features"]:
                         metadata = GeoJSONProperties(item["properties"])
                         try:
+                            province = (
+                                Province.objects.filter(
+                                    name__iexact=metadata.province.strip()
+                                ).first()
+                                if metadata.province
+                                else None
+                            )
+                            area_council = (
+                                AreaCouncil.objects.filter(
+                                    name__iexact=metadata.area_council.strip()
+                                ).first()
+                                if metadata.province
+                                else None
+                            )
+                            attribute = (
+                                metadata.attribute.strip()
+                                if metadata.attribute
+                                else None
+                            )
                             VectorItem.objects.create(
                                 dataset=form.cleaned_data["dataset"],
                                 metadata=metadata.properties,
-                                name=metadata.name.strip(),
+                                name=metadata.name.strip() if metadata.name else None,
                                 ref=metadata.ref,
-                                attribute=metadata.attribute.strip(),
-                                province=Province.objects.filter(
-                                    name__iexact=metadata.province.strip()
-                                ).first(),
-                                area_council=AreaCouncil.objects.filter(
-                                    name__iexact=metadata.area_council.strip()
-                                ).first(),
+                                attribute=attribute,
+                                province=province,
+                                area_council=area_council,
                                 geometry=GEOSGeometry(json.dumps(item["geometry"])),
                             )
                             created_count += 1

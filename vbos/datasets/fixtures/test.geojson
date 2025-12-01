@@ -84,6 +84,26 @@
         ],
         "type": "Point"
       }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          168.329144,
+          -17.523629
+        ]
+      },
+      "properties": {
+        "id": 199163611,
+        "SYSTEM_NAM": "WS_Siviri",
+        "PID": null,
+        "Pname": null,
+        "AC2022": null,
+        "ACNAME22": null,
+        "Area": null,
+        "Area KMsq": null
+      }
     }
   ]
 }
