@@ -1,19 +1,20 @@
 from django_filters import (
-    FilterSet,
     CharFilter,
-    OrderingFilter,
     DateFromToRangeFilter,
+    FilterSet,
     ModelChoiceFilter,
+    OrderingFilter,
 )
 
 from .models import (
     AreaCouncil,
+    Cluster,
+    PMTilesDataset,
     Province,
     RasterDataset,
+    TabularDataset,
     TabularItem,
     VectorDataset,
-    TabularDataset,
-    Cluster,
     VectorItem,
 )
 
@@ -37,6 +38,12 @@ class DatasetFilter(FilterSet):
 class RasterDatasetFilter(DatasetFilter):
     class Meta:
         model = RasterDataset
+        fields = ["name", "source", "cluster", "created", "updated"]
+
+
+class PMTilesDatasetFilter(DatasetFilter):
+    class Meta:
+        model = PMTilesDataset
         fields = ["name", "source", "cluster", "created", "updated"]
 
 

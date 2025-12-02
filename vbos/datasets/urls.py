@@ -13,11 +13,19 @@ urlpatterns = [
         views.AreaCouncilListView.as_view(),
         name="area-council-list",
     ),
+    # raster
     path("raster/", views.RasterDatasetListView.as_view(), name="raster-list"),
     path(
         "raster/<int:pk>/",
         views.RasterDatasetDetailView.as_view(),
         name="raster-detail",
+    ),
+    # pmtiles
+    path("pmtiles/", views.PMTilesDatasetListView.as_view(), name="pmtiles-list"),
+    path(
+        "pmtiles/<int:pk>/",
+        views.PMTilesDatasetDetailView.as_view(),
+        name="pmtiles-detail",
     ),
     # vector
     path("vector/", views.VectorDatasetListView.as_view(), name="vector-list"),

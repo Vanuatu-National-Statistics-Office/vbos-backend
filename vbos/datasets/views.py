@@ -1,13 +1,13 @@
 import django_filters.rest_framework
-from rest_framework.generics import ListAPIView, RetrieveAPIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework_gis.pagination import GeoJsonPagination
-from rest_framework_gis.filters import InBBoxFilter
 from drf_excel.mixins import XLSXFileMixin
 from drf_excel.renderers import XLSXRenderer
-
+from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework_gis.filters import InBBoxFilter
+from rest_framework_gis.pagination import GeoJsonPagination
 
 from vbos.datasets.filters import (
+    PMTilesDatasetFilter,
     RasterDatasetFilter,
     TabularDatasetFilter,
     TabularItemFilter,
@@ -18,6 +18,7 @@ from vbos.datasets.filters import (
 from .models import (
     AreaCouncil,
     Cluster,
+    PMTilesDataset,
     Province,
     RasterDataset,
     TabularDataset,
@@ -29,6 +30,7 @@ from .pagination import StandardResultsSetPagination
 from .serializers import (
     AreaCouncilSerializer,
     ClusterSerializer,
+    PMTilesDatasetSerializer,
     ProvinceSerializer,
     RasterDatasetSerializer,
     TabularDatasetSerializer,
@@ -75,6 +77,20 @@ class RasterDatasetListView(ListAPIView):
 class RasterDatasetDetailView(RetrieveAPIView):
     queryset = RasterDataset.objects.all()
     serializer_class = RasterDatasetSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+
+class PMTilesDatasetListView(ListAPIView):
+    queryset = PMTilesDataset.objects.all()
+    serializer_class = PMTilesDatasetSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = StandardResultsSetPagination
+    filterset_class = PMTilesDatasetFilter
+
+
+class PMTilesDatasetDetailView(RetrieveAPIView):
+    queryset = PMTilesDataset.objects.all()
+    serializer_class = PMTilesDatasetSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
