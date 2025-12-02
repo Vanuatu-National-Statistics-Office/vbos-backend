@@ -4,6 +4,7 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from .models import (
     AreaCouncil,
     Cluster,
+    PMTilesDataset,
     Province,
     RasterDataset,
     TabularDataset,
@@ -66,6 +67,25 @@ class VectorDatasetSerializer(serializers.ModelSerializer):
             "cluster",
             "type",
             "source",
+        ]
+
+
+class PMTilesDatasetSerializer(serializers.ModelSerializer):
+    cluster = serializers.ReadOnlyField(source="cluster.name")
+
+    class Meta:
+        model = PMTilesDataset
+        fields = [
+            "id",
+            "name",
+            "description",
+            "created",
+            "updated",
+            "cluster",
+            "type",
+            "source",
+            "url",
+            "source_layer",
         ]
 
 

@@ -133,6 +133,29 @@ class VectorDataset(models.Model):
         unique_together = ["name", "type", "cluster"]
 
 
+class PMTilesDataset(models.Model):
+    name = models.CharField(max_length=155, unique=False)
+    description = models.TextField(max_length=2000, null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    cluster = models.ForeignKey(
+        Cluster,
+        on_delete=models.PROTECT,
+    )
+    type = models.CharField(max_length=55, choices=TYPE_CHOICES, default="baseline")
+    source = models.CharField(max_length=155, blank=True, null=True)
+    url = models.CharField(max_length=1550)
+    source_layer = models.CharField(max_length=155)
+
+    def __str__(self):
+        return f"{self.name} - {self.cluster} / {self.type}"
+
+    class Meta:
+        ordering = ["id"]
+        unique_together = ["name", "type", "cluster"]
+        verbose_name = "PMTiles Dataset"
+
+
 class VectorItem(models.Model):
     dataset = models.ForeignKey(VectorDataset, on_delete=models.CASCADE)
     name = models.CharField(max_length=155, blank=True, null=True)

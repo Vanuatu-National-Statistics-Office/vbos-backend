@@ -14,6 +14,7 @@ from .forms import CSVUploadForm, GeoJSONUploadForm
 from .models import (
     AreaCouncil,
     Cluster,
+    PMTilesDataset,
     Province,
     RasterDataset,
     RasterFile,
@@ -38,6 +39,12 @@ class RasterFileAdmin(admin.ModelAdmin):
 @admin.register(RasterDataset)
 class RasterDatasetAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "cluster", "type", "updated", "filename_id"]
+    list_filter = ["cluster", "type"]
+
+
+@admin.register(PMTilesDataset)
+class PMTilesDatasetAdmin(admin.ModelAdmin):
+    list_display = ["id", "name", "cluster", "type", "updated"]
     list_filter = ["cluster", "type"]
 
 
