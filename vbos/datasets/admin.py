@@ -8,8 +8,6 @@ from django.contrib.gis.geos.geometry import GEOSGeometry
 from django.shortcuts import redirect, render, reverse
 from django.urls import path
 
-from vbos.datasets.utils import GeoJSONProperties, clean_redundant_tabular_items
-
 from .forms import CSVUploadForm, GeoJSONUploadForm
 from .models import (
     AreaCouncil,
@@ -23,7 +21,12 @@ from .models import (
     VectorDataset,
     VectorItem,
 )
-from .utils import CSVRow, create_tabular_item
+from .utils import (
+    CSVRow,
+    GeoJSONProperties,
+    clean_redundant_tabular_items,
+    create_tabular_item,
+)
 
 
 @admin.register(Cluster)

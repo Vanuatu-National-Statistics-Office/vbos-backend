@@ -1,10 +1,9 @@
-from pickle import OBJ
+from django.contrib.gis.geos import LineString, Point, Polygon
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.urls import reverse
-from django.contrib.gis.geos import Polygon, LineString, Point
 
-from ..models import AreaCouncil, Province, VectorDataset, VectorItem, Cluster
+from ..models import AreaCouncil, Cluster, Province, VectorDataset, VectorItem
 
 
 class TestVectorDatasetListDetailViews(APITestCase):
