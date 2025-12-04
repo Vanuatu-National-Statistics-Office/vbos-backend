@@ -1,4 +1,5 @@
-from rest_framework import viewsets, mixins
+from rest_framework import mixins, viewsets
+
 from .models import User
 from .permissions import IsUserOrCreatingAccountOrReadOnly
 from .serializers import CreateUserSerializer, UserSerializer
