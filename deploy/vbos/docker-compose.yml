@@ -26,7 +26,7 @@ services:
     networks:
       - caddy
     labels:
-      caddy: vbos-backend.ds.io
+      caddy: api.vcdmis.com
       caddy.reverse_proxy: "{{upstreams 8000}}"
       caddy.handle: "/static/*"
       caddy.handle.root: "* /www/html"
@@ -65,7 +65,7 @@ services:
     networks:
       - caddy
     labels:
-      caddy: vbos-titiler.ds.io
+      caddy: titiler.vcdmis.com
       caddy.reverse_proxy: "{{upstreams 8001}}"
 
 networks:
