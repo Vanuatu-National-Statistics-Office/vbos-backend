@@ -63,11 +63,11 @@ class AreaCouncilListView(ListAPIView):
     def get_queryset(self):
         return AreaCouncil.objects.filter(
             province__name__iexact=self.kwargs.get("province")
-        )
+        ).select_related("province")
 
 
 class RasterDatasetListView(ListAPIView):
-    queryset = RasterDataset.objects.all()
+    queryset = RasterDataset.objects.all().select_related("cluster")
     serializer_class = RasterDatasetSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = StandardResultsSetPagination
@@ -81,7 +81,7 @@ class RasterDatasetDetailView(RetrieveAPIView):
 
 
 class PMTilesDatasetListView(ListAPIView):
-    queryset = PMTilesDataset.objects.all()
+    queryset = PMTilesDataset.objects.all().select_related("cluster")
     serializer_class = PMTilesDatasetSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = StandardResultsSetPagination
@@ -95,7 +95,7 @@ class PMTilesDatasetDetailView(RetrieveAPIView):
 
 
 class VectorDatasetListView(ListAPIView):
-    queryset = VectorDataset.objects.all()
+    queryset = VectorDataset.objects.all().select_related("cluster")
     serializer_class = VectorDatasetSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = StandardResultsSetPagination
@@ -120,11 +120,13 @@ class VectorDatasetDataView(ListAPIView):
     )
 
     def get_queryset(self):
-        return VectorItem.objects.filter(dataset=self.kwargs.get("pk"))
+        return VectorItem.objects.filter(dataset=self.kwargs.get("pk")).select_related(
+            "province", "area_council"
+        )
 
 
 class TabularDatasetListView(ListAPIView):
-    queryset = TabularDataset.objects.all()
+    queryset = TabularDataset.objects.all().select_related("cluster")
     serializer_class = TabularDatasetSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = StandardResultsSetPagination
@@ -141,9 +143,12 @@ class TabularDatasetDataView(ListAPIView):
     filterset_class = TabularItemFilter
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = TabularItemSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
-        return TabularItem.objects.filter(dataset=self.kwargs.get("pk"))
+        return TabularItem.objects.filter(dataset=self.kwargs.get("pk")).select_related(
+            "province", "area_council"
+        )
 
 
 class TabularDatasetXSLXDataView(XLSXFileMixin, TabularDatasetDataView):
