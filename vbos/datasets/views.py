@@ -1,4 +1,6 @@
 import django_filters.rest_framework
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_control
 from drf_excel.mixins import XLSXFileMixin
 from drf_excel.renderers import XLSXRenderer
 from rest_framework.generics import ListAPIView, RetrieveAPIView
@@ -41,21 +43,35 @@ from .serializers import (
 )
 
 
-class ClusterListView(ListAPIView):
+class CachedAPIViewMixin:
+    """
+    Mixin to add cache headers to list and retrieve API views
+    """
+
+    @method_decorator(cache_control(public=True, max_age=86400))
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @method_decorator(cache_control(public=True, max_age=86400))
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+
+class ClusterListView(CachedAPIViewMixin, ListAPIView):
     queryset = Cluster.objects.all()
     serializer_class = ClusterSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = StandardResultsSetPagination
 
 
-class ProvinceListView(ListAPIView):
+class ProvinceListView(CachedAPIViewMixin, ListAPIView):
     queryset = Province.objects.all()
     serializer_class = ProvinceSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = GeoJsonPagination
 
 
-class AreaCouncilListView(ListAPIView):
+class AreaCouncilListView(CachedAPIViewMixin, ListAPIView):
     serializer_class = AreaCouncilSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = GeoJsonPagination
@@ -66,7 +82,7 @@ class AreaCouncilListView(ListAPIView):
         ).select_related("province")
 
 
-class RasterDatasetListView(ListAPIView):
+class RasterDatasetListView(CachedAPIViewMixin, ListAPIView):
     queryset = RasterDataset.objects.all().select_related("cluster")
     serializer_class = RasterDatasetSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -74,13 +90,13 @@ class RasterDatasetListView(ListAPIView):
     filterset_class = RasterDatasetFilter
 
 
-class RasterDatasetDetailView(RetrieveAPIView):
+class RasterDatasetDetailView(CachedAPIViewMixin, RetrieveAPIView):
     queryset = RasterDataset.objects.all()
     serializer_class = RasterDatasetSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-class PMTilesDatasetListView(ListAPIView):
+class PMTilesDatasetListView(CachedAPIViewMixin, ListAPIView):
     queryset = PMTilesDataset.objects.all().select_related("cluster")
     serializer_class = PMTilesDatasetSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -88,13 +104,13 @@ class PMTilesDatasetListView(ListAPIView):
     filterset_class = PMTilesDatasetFilter
 
 
-class PMTilesDatasetDetailView(RetrieveAPIView):
+class PMTilesDatasetDetailView(CachedAPIViewMixin, RetrieveAPIView):
     queryset = PMTilesDataset.objects.all()
     serializer_class = PMTilesDatasetSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-class VectorDatasetListView(ListAPIView):
+class VectorDatasetListView(CachedAPIViewMixin, ListAPIView):
     queryset = VectorDataset.objects.all().select_related("cluster")
     serializer_class = VectorDatasetSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -102,13 +118,13 @@ class VectorDatasetListView(ListAPIView):
     filterset_class = VectorDatasetFilter
 
 
-class VectorDatasetDetailView(RetrieveAPIView):
+class VectorDatasetDetailView(CachedAPIViewMixin, RetrieveAPIView):
     queryset = VectorDataset.objects.all()
     serializer_class = VectorDatasetSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-class VectorDatasetDataView(ListAPIView):
+class VectorDatasetDataView(CachedAPIViewMixin, ListAPIView):
     serializer_class = VectorItemSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = GeoJsonPagination
@@ -125,7 +141,7 @@ class VectorDatasetDataView(ListAPIView):
         )
 
 
-class TabularDatasetListView(ListAPIView):
+class TabularDatasetListView(CachedAPIViewMixin, ListAPIView):
     queryset = TabularDataset.objects.all().select_related("cluster")
     serializer_class = TabularDatasetSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -133,13 +149,13 @@ class TabularDatasetListView(ListAPIView):
     filterset_class = TabularDatasetFilter
 
 
-class TabularDatasetDetailView(RetrieveAPIView):
+class TabularDatasetDetailView(CachedAPIViewMixin, RetrieveAPIView):
     queryset = TabularDataset.objects.all()
     serializer_class = TabularDatasetSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-class TabularDatasetDataView(ListAPIView):
+class TabularDatasetDataView(CachedAPIViewMixin, ListAPIView):
     filterset_class = TabularItemFilter
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = TabularItemSerializer
