@@ -1,9 +1,10 @@
 # vbos-backend
 
-[![Build Status](https://travis-ci.org/developmentseed/vbos-backend.svg?branch=master)](https://travis-ci.org/developmentseed/vbos-backend)
+[![Django CI](https://github.com/Vanuatu-National-Statistics-Office/vbos-backend/actions/workflows/test.yml/badge.svg)](https://github.com/Vanuatu-National-Statistics-Office/vbos-backend/actions/workflows/test.yml)
 [![Built with](https://img.shields.io/badge/Built_with-Cookiecutter_Django_Rest-F7B633.svg)](https://github.com/agconti/cookiecutter-django-rest)
 
-VBOS Django application and data services. Check out the project's [documentation](http://developmentseed.github.io/vbos-backend/).
+VBOS Django application and data services.
+Check out the project's [source code](https://github.com/Vanuatu-National-Statistics-Office/vbos-backend/).
 
 # Prerequisites
 

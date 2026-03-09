@@ -1,6 +1,7 @@
 # Data Imports
 
-To add data into the system, the first step needed is to create a superuser account. Check the [index.md](/docs/index.md#initialize-the-project) for instructions on how to do it.
+To add data into the system, the first step needed is to create a superuser account.
+Check the [index.md](index.md#initialize-the-project) for instructions on how to do it.
 
 With the superuser account, you can login on the Administration Interface. The URL will be: `{backend-url}/admin`.
 

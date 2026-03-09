@@ -1,8 +1,9 @@
-site_name: vbos
+site_name: vbos-backend
 site_description: VBOS Django application and data services
-repo_url: https://github.com/developmentseed/vbos-backend
+repo_url: https://github.com/Vanuatu-National-Statistics-Office/vbos-backend
+docs_dir: docs
 site_dir: site
-copyright: Copyright &copy; 2020, <a href="https://github.com/developmentseed">developmentseed</a>.
+copyright: Copyright &copy; 2026, <a href="https://vbos.gov.vu/">Vanuatu Bureau of Statistics</a>.
 dev_addr: 0.0.0.0:8001
 
 nav:
