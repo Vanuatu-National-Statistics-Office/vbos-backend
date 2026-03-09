@@ -6,7 +6,8 @@ copyright: Copyright &copy; 2020, <a href="https://github.com/developmentseed">d
 dev_addr: 0.0.0.0:8001
 
 nav:
-  - Home: 'index.md'
+  - Home: "index.md"
+  - "data.md"
   - API:
-    - Authentication: 'api/authentication.md'
-    - Users: 'api/users.md'
+      - Authentication: "api/authentication.md"
+      - Users: "api/users.md"
