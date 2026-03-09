@@ -6,6 +6,9 @@ site_dir: site
 copyright: Copyright &copy; 2026, <a href="https://vbos.gov.vu/">Vanuatu Bureau of Statistics</a>.
 dev_addr: 0.0.0.0:8001
 
+theme:
+  name: mkdocs
+  navigation_depth: 3
 nav:
   - Home: "index.md"
   - "data.md"
