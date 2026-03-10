@@ -2,34 +2,43 @@ name: Django CI
 
 on: push
 
+permissions: {}
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: test
     strategy:
       max-parallel: 4
       matrix:
-        python-version: ['3.13']
+        python-version: ["3.13"]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup PostgreSQL with Postgis
-      uses: nyurik/action-setup-postgis@v2.1
-      with:
-        database: vbos
-      id: postgres
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      run: |
-        sudo apt-get update -qq -y
-        sudo apt-get install -y binutils libproj-dev python3-gdal libgeos-dev libyaml-dev
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Run Tests
-      run: |
-        coverage run manage.py test --settings=vbos.config.local
-      env:
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Setup PostgreSQL with Postgis
+        uses: nyurik/action-setup-postgis@5183a5e26ade31809faed263cd4d638e144fe186 # v2.2
+        with:
+          database: vbos
+        id: postgres
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update -qq -y
+          sudo apt-get install -y binutils libproj-dev python3-gdal libgeos-dev libyaml-dev
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Tests
+        run: |
+          coverage run manage.py test --settings=vbos.config.local
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
